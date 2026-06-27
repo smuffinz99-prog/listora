@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Amazon Listing Generator — Free AI Tool | Listora</title>
+<meta name="description" content="Generate optimised Amazon product titles, bullet points, descriptions, and backend keywords in 30 seconds. Free Amazon listing generator — no account required.">
+<link rel="canonical" href="https://smuffinz99-prog.github.io/listora/amazon-listing-generator.html">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[
+{"@type":"Question","name":"What is an Amazon listing generator?","acceptedAnswer":{"@type":"Answer","text":"An Amazon listing generator is a tool that automatically creates optimised product titles, bullet points, descriptions, and backend keywords following Amazon's A9 algorithm best practices — so your listings rank higher and convert better."}},
+{"@type":"Question","name":"How long does it take to generate an Amazon listing?","acceptedAnswer":{"@type":"Answer","text":"Listora generates a complete Amazon listing — title, 5 bullet points, description, and backend keywords — in under 30 seconds."}},
+{"@type":"Question","name":"Is Listora free to use?","acceptedAnswer":{"@type":"Answer","text":"Yes. Listora offers 3 free listings per day with no account required. Upgrade to Pro for unlimited listings and GPT-4 powered AI mode."}},
+{"@type":"Question","name":"Does the generated title fit Amazon's character limit?","acceptedAnswer":{"@type":"Answer","text":"Yes. Listora displays a live character counter and targets the 150–200 character sweet spot Amazon recommends for most categories."}},
+{"@type":"Question","name":"Can I use Listora for Amazon FBA listings?","acceptedAnswer":{"@type":"Answer","text":"Absolutely. Listora is designed with Amazon FBA sellers in mind — the generated copy follows Amazon's style guide, includes relevant keywords, and uses benefit-first bullet formatting."}},
+{"@type":"Question","name":"Do I need an OpenAI API key?","acceptedAnswer":{"@type":"Answer","text":"No. The free tier uses Listora's smart template engine. Pro users can optionally connect their own OpenAI API key for GPT-4 powered copy."}}
+]}
+</script>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--bg:#0a0d14;--surface:#111827;--surface2:#1f2937;--border:#2d3748;--text:#f1f5f9;--muted:#94a3b8;--accent:#6366f1;--green:#10b981;--yellow:#f59e0b;--radius:8px}
+body{background:var(--bg);color:var(--text);font:16px/1.7 system-ui,-apple-system,sans-serif}
+a{color:var(--accent);text-decoration:none}
+nav{display:flex;align-items:center;justify-content:space-between;padding:0 32px;height:56px;background:var(--surface);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:10}
+.logo{font-size:20px;font-weight:900}.logo span{color:var(--accent)}
+.nav-cta{padding:8px 20px;background:var(--accent);color:#fff;border-radius:var(--radius);font-weight:700;font-size:14px}
+.hero{padding:72px 32px 56px;text-align:center;max-width:800px;margin:0 auto}
+.hero h1{font-size:clamp(32px,5vw,52px);font-weight:900;line-height:1.15;margin-bottom:20px}
+.hero h1 span{background:linear-gradient(135deg,var(--accent),#8b5cf6);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.hero p{font-size:18px;color:var(--muted);max-width:580px;margin:0 auto 32px}
+.hero-cta{display:inline-flex;align-items:center;gap:8px;padding:16px 36px;background:linear-gradient(135deg,var(--accent),#8b5cf6);color:#fff;border-radius:var(--radius);font-size:18px;font-weight:800}
+.stats{display:flex;justify-content:center;gap:48px;padding:32px;border-top:1px solid var(--border);border-bottom:1px solid var(--border);flex-wrap:wrap;background:var(--surface)}
+.stat{text-align:center}.stat-n{font-size:32px;font-weight:900;color:var(--accent)}.stat-l{font-size:13px;color:var(--muted)}
+.container{max-width:900px;margin:0 auto;padding:64px 32px}
+h2{font-size:32px;font-weight:800;margin-bottom:16px}
+h3{font-size:20px;font-weight:700;margin-bottom:10px}
+.section{margin-bottom:64px}
+.card-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:20px;margin-top:32px}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:24px}
+.card-icon{font-size:28px;margin-bottom:12px}
+.card p{font-size:14px;color:var(--muted);margin-top:6px}
+.steps{display:flex;flex-direction:column;gap:24px;margin-top:32px}
+.step{display:flex;gap:20px;align-items:flex-start}
+.step-num{width:40px;height:40px;border-radius:50%;background:var(--accent);color:#fff;font-weight:800;font-size:16px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.step-body h3{margin-bottom:4px}
+.step-body p{font-size:15px;color:var(--muted)}
+.demo-box{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:28px;margin-top:32px}
+.demo-label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);margin-bottom:8px}
+.demo-title{font-size:15px;font-weight:600;color:var(--text);margin-bottom:20px;line-height:1.5}
+.bullet-list{list-style:none;display:flex;flex-direction:column;gap:10px}
+.bullet-list li{padding:10px 14px;background:var(--surface2);border-radius:6px;border-left:3px solid var(--accent);font-size:14px}
+.bullet-list li strong{color:var(--accent)}
+.faq{display:flex;flex-direction:column;gap:12px;margin-top:32px}
+.faq-item{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden}
+.faq-q{width:100%;text-align:left;padding:18px 20px;background:none;border:none;color:var(--text);font-size:15px;font-weight:600;cursor:pointer;display:flex;justify-content:space-between;align-items:center}
+.faq-q::after{content:'＋';font-size:18px;color:var(--accent)}
+.faq-a{padding:0 20px;max-height:0;overflow:hidden;transition:max-height .3s,padding .3s;font-size:14px;color:var(--muted);line-height:1.7}
+.faq-item.open .faq-q::after{content:'－'}
+.faq-item.open .faq-a{max-height:200px;padding:0 20px 18px}
+.cta-section{text-align:center;background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:56px 32px;margin-top:64px}
+.cta-section h2{margin-bottom:12px}
+.cta-section p{color:var(--muted);margin-bottom:28px}
+footer{text-align:center;padding:32px;color:var(--muted);font-size:13px;border-top:1px solid var(--border)}
+</style>
+</head>
+<body>
+<nav>
+  <a class="logo" href="index.html"><span>List</span>ora</a>
+  <a class="nav-cta" href="app.html">Try Free →</a>
+</nav>
+
+<div class="hero">
+  <h1>Free <span>Amazon Listing Generator</span> — Titles, Bullets & Keywords</h1>
+  <p>Generate a complete, optimised Amazon listing in 30 seconds. No account needed. Just enter your product details and get copy that ranks.</p>
+  <a class="hero-cta" href="app.html">Generate My Amazon Listing →</a>
+</div>
+
+<div class="stats">
+  <div class="stat"><div class="stat-n">30s</div><div class="stat-l">Average generation time</div></div>
+  <div class="stat"><div class="stat-n">200</div><div class="stat-l">Character-optimised titles</div></div>
+  <div class="stat"><div class="stat-n">5</div><div class="stat-l">Benefit-first bullet points</div></div>
+  <div class="stat"><div class="stat-n">249</div><div class="stat-l">Backend keyword chars</div></div>
+</div>
+
+<div class="container">
+  <div class="section">
+    <h2>What You Get With Every Amazon Listing</h2>
+    <div class="card-grid">
+      <div class="card"><div class="card-icon">📝</div><h3>Optimised Title</h3><p>150–200 character title structured with keywords, key features, and audience — following Amazon's A9 ranking signals.</p></div>
+      <div class="card"><div class="card-icon">✅</div><h3>5 Bullet Points</h3><p>Benefit-first bullets with leading bold keyword, specific feature detail, and a compelling outcome statement.</p></div>
+      <div class="card"><div class="card-icon">📄</div><h3>Full Description</h3><p>2–3 paragraph A+ Content-ready description that handles objections and closes the sale.</p></div>
+      <div class="card"><div class="card-icon">🔑</div><h3>Backend Keywords</h3><p>Under 249 characters of backend search terms covering long-tail phrases Amazon indexes but doesn't show buyers.</p></div>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>How It Works</h2>
+    <div class="steps">
+      <div class="step"><div class="step-num">1</div><div class="step-body"><h3>Enter your product details</h3><p>Product name, category, up to 5 key features, target audience, and your unique selling point.</p></div></div>
+      <div class="step"><div class="step-num">2</div><div class="step-body"><h3>Choose your tone</h3><p>Professional, Friendly, Premium, or Urgency — Listora adapts the copy style to your brand.</p></div></div>
+      <div class="step"><div class="step-num">3</div><div class="step-body"><h3>Generate and copy</h3><p>Click Generate. Your full listing appears in seconds. Copy individual sections or everything at once.</p></div></div>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>Example Amazon Listing Output</h2>
+    <div class="demo-box">
+      <div class="demo-label">Title (186 chars)</div>
+      <div class="demo-title">Stainless Steel Water Bottle | Double-Wall Insulated | 32oz Leak-Proof | BPA-Free | For Gym, Hiking & Office — Keeps Drinks Cold 24H, Hot 12H</div>
+      <div class="demo-label" style="margin-top:16px">Bullet Points</div>
+      <ul class="bullet-list">
+        <li><strong>DOUBLE-WALL INSULATED:</strong> Advanced vacuum insulation keeps beverages cold for 24 hours and hot for 12 — so your coffee stays perfect from morning commute to afternoon meeting.</li>
+        <li><strong>LEAK-PROOF LID:</strong> Triple-sealed lid with locking mechanism means you can throw it in your gym bag, backpack, or car without a single drop.</li>
+        <li><strong>BPA-FREE STAINLESS STEEL:</strong> Food-grade 18/8 stainless steel with zero plastic taste — safe for you, your kids, and the planet.</li>
+        <li><strong>32OZ CAPACITY:</strong> The perfect size to hit your daily hydration goal without constant refilling — one bottle, all day.</li>
+        <li><strong>DISHWASHER SAFE:</strong> Engineered for reliability you can count on — toss it in the dishwasher, it comes out spotless every time.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>Why Your Amazon Listing Matters</h2>
+    <p style="color:var(--muted);margin-bottom:24px">Over 9.7 million sellers compete on Amazon. The difference between page 1 and page 5 often comes down to listing quality — not product quality.</p>
+    <div class="card-grid">
+      <div class="card"><div class="card-icon">📈</div><h3>Better Rankings</h3><p>Amazon's A9 algorithm rewards keyword-rich, structured listings. Listora outputs follow every ranking factor.</p></div>
+      <div class="card"><div class="card-icon">💰</div><h3>Higher Conversions</h3><p>Benefit-first copy that speaks to your buyer's actual goals converts browsers into buyers.</p></div>
+      <div class="card"><div class="card-icon">⏱️</div><h3>Hours Saved</h3><p>Writing a quality Amazon listing manually takes 3–5 hours. Listora does it in 30 seconds.</p></div>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>Frequently Asked Questions</h2>
+    <div class="faq">
+      <div class="faq-item"><button class="faq-q">What is an Amazon listing generator?</button><div class="faq-a">An Amazon listing generator is a tool that automatically creates optimised product titles, bullet points, descriptions, and backend keywords following Amazon's A9 algorithm best practices — so your listings rank higher and convert better.</div></div>
+      <div class="faq-item"><button class="faq-q">How long does it take to generate an Amazon listing?</button><div class="faq-a">Listora generates a complete Amazon listing — title, 5 bullet points, description, and backend keywords — in under 30 seconds.</div></div>
+      <div class="faq-item"><button class="faq-q">Is Listora free to use?</button><div class="faq-a">Yes. Listora offers 3 free listings per day with no account required. Upgrade to Pro for unlimited listings and GPT-4 powered AI mode.</div></div>
+      <div class="faq-item"><button class="faq-q">Does the generated title fit Amazon's character limit?</button><div class="faq-a">Yes. Listora displays a live character counter and targets the 150–200 character sweet spot Amazon recommends for most categories.</div></div>
+      <div class="faq-item"><button class="faq-q">Can I use Listora for Amazon FBA listings?</button><div class="faq-a">Absolutely. Listora is designed with Amazon FBA sellers in mind — the generated copy follows Amazon's style guide, includes relevant keywords, and uses benefit-first bullet formatting.</div></div>
+      <div class="faq-item"><button class="faq-q">Do I need an OpenAI API key?</button><div class="faq-a">No. The free tier uses Listora's smart template engine. Pro users can optionally connect their own OpenAI API key for GPT-4 powered copy.</div></div>
+    </div>
+  </div>
+
+  <div class="cta-section">
+    <h2>Generate Your Amazon Listing Now — Free</h2>
+    <p>No account. No credit card. 3 free listings per day.</p>
+    <a class="hero-cta" href="app.html">Start Generating →</a>
+  </div>
+</div>
+
+<footer>
+  <p>© 2026 Listora · <a href="index.html">Home</a> · <a href="app.html">Generator</a> · <a href="etsy-listing-generator.html">Etsy</a> · <a href="shopify-product-description.html">Shopify</a></p>
+</footer>
+
+<script>
+document.querySelectorAll('.faq-q').forEach(function(btn){
+  btn.addEventListener('click',function(){
+    this.closest('.faq-item').classList.toggle('open');
+  });
+});
+</script>
+</body>
+</html>

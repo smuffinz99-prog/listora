@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Etsy Listing Generator — Free Tool for Etsy Sellers | Listora</title>
+<meta name="description" content="Generate Etsy product titles, descriptions, and all 13 tags in seconds. Free Etsy listing generator that follows Etsy SEO best practices — no account required.">
+<link rel="canonical" href="https://smuffinz99-prog.github.io/listora/etsy-listing-generator.html">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[
+{"@type":"Question","name":"How do I write a good Etsy listing?","acceptedAnswer":{"@type":"Answer","text":"A good Etsy listing uses a keyword-rich title (up to 140 chars), a benefit-focused description that tells your story, and all 13 tags using long-tail phrases your buyers actually search for."}},
+{"@type":"Question","name":"What are Etsy listing tags?","acceptedAnswer":{"@type":"Answer","text":"Etsy allows up to 13 tags per listing — short keyword phrases (up to 20 chars each) that Etsy uses to match your product to buyer searches. Using all 13 tags is essential for maximum visibility."}},
+{"@type":"Question","name":"How long should an Etsy title be?","acceptedAnswer":{"@type":"Answer","text":"Etsy titles can be up to 140 characters. Front-load your most important keywords since Etsy shows only the first 55–70 characters in search results."}},
+{"@type":"Question","name":"Is Listora free for Etsy sellers?","acceptedAnswer":{"@type":"Answer","text":"Yes. You get 3 free Etsy listings per day with no account or credit card required. Pro unlocks unlimited listings and AI-powered copy."}},
+{"@type":"Question","name":"Does Listora generate all 13 Etsy tags?","acceptedAnswer":{"@type":"Answer","text":"Yes. Listora automatically generates all 13 Etsy tags based on your product name, features, and category — covering long-tail buyer search phrases."}}
+]}
+</script>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--bg:#0a0d14;--surface:#111827;--surface2:#1f2937;--border:#2d3748;--text:#f1f5f9;--muted:#94a3b8;--accent:#f97316;--green:#10b981;--radius:8px}
+body{background:var(--bg);color:var(--text);font:16px/1.7 system-ui,-apple-system,sans-serif}
+a{color:#6366f1;text-decoration:none}
+nav{display:flex;align-items:center;justify-content:space-between;padding:0 32px;height:56px;background:var(--surface);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:10}
+.logo{font-size:20px;font-weight:900}.logo span{color:#6366f1}
+.nav-cta{padding:8px 20px;background:#6366f1;color:#fff;border-radius:var(--radius);font-weight:700;font-size:14px}
+.hero{padding:72px 32px 56px;text-align:center;max-width:800px;margin:0 auto}
+.hero h1{font-size:clamp(30px,5vw,50px);font-weight:900;line-height:1.15;margin-bottom:20px}
+.hero h1 span{background:linear-gradient(135deg,var(--accent),#fb923c);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.hero p{font-size:18px;color:var(--muted);max-width:580px;margin:0 auto 32px}
+.hero-cta{display:inline-flex;align-items:center;gap:8px;padding:16px 36px;background:linear-gradient(135deg,var(--accent),#fb923c);color:#fff;border-radius:var(--radius);font-size:18px;font-weight:800}
+.stats{display:flex;justify-content:center;gap:48px;padding:32px;border-top:1px solid var(--border);border-bottom:1px solid var(--border);flex-wrap:wrap;background:var(--surface)}
+.stat{text-align:center}.stat-n{font-size:32px;font-weight:900;color:var(--accent)}.stat-l{font-size:13px;color:var(--muted)}
+.container{max-width:900px;margin:0 auto;padding:64px 32px}
+h2{font-size:30px;font-weight:800;margin-bottom:16px}
+h3{font-size:18px;font-weight:700;margin-bottom:8px}
+.section{margin-bottom:64px}
+.card-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:20px;margin-top:28px}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:22px}
+.card-icon{font-size:26px;margin-bottom:10px}
+.card p{font-size:14px;color:var(--muted);margin-top:4px}
+.demo-box{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:28px;margin-top:28px}
+.demo-label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);margin-bottom:8px}
+.demo-title{font-size:15px;font-weight:600;margin-bottom:16px;line-height:1.5}
+.tags-wrap{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
+.tag-pill{background:var(--surface2);border:1px solid var(--border);border-radius:100px;padding:5px 14px;font-size:13px}
+.faq{display:flex;flex-direction:column;gap:12px;margin-top:28px}
+.faq-item{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden}
+.faq-q{width:100%;text-align:left;padding:16px 20px;background:none;border:none;color:var(--text);font-size:15px;font-weight:600;cursor:pointer;display:flex;justify-content:space-between}
+.faq-q::after{content:'＋';font-size:18px;color:var(--accent)}
+.faq-a{padding:0 20px;max-height:0;overflow:hidden;transition:max-height .3s,padding .3s;font-size:14px;color:var(--muted);line-height:1.7}
+.faq-item.open .faq-q::after{content:'－'}
+.faq-item.open .faq-a{max-height:200px;padding:0 20px 16px}
+.cta-section{text-align:center;background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:56px 32px;margin-top:64px}
+.cta-section p{color:var(--muted);margin:12px 0 28px}
+footer{text-align:center;padding:32px;color:var(--muted);font-size:13px;border-top:1px solid var(--border)}
+</style>
+</head>
+<body>
+<nav>
+  <a class="logo" href="index.html"><span>List</span>ora</a>
+  <a class="nav-cta" href="app.html">Try Free →</a>
+</nav>
+
+<div class="hero">
+  <h1>Free <span>Etsy Listing Generator</span> — Titles, Descriptions & All 13 Tags</h1>
+  <p>Stop guessing what Etsy buyers search for. Generate keyword-optimised Etsy listings in seconds — including all 13 tags.</p>
+  <a class="hero-cta" href="app.html?plat=etsy">Generate My Etsy Listing →</a>
+</div>
+
+<div class="stats">
+  <div class="stat"><div class="stat-n">13</div><div class="stat-l">Tags generated automatically</div></div>
+  <div class="stat"><div class="stat-n">140</div><div class="stat-l">Char-optimised title</div></div>
+  <div class="stat"><div class="stat-n">30s</div><div class="stat-l">Generation time</div></div>
+  <div class="stat"><div class="stat-n">Free</div><div class="stat-l">No account needed</div></div>
+</div>
+
+<div class="container">
+  <div class="section">
+    <h2>What Listora Generates for Etsy</h2>
+    <div class="card-grid">
+      <div class="card"><div class="card-icon">🏷️</div><h3>Etsy Title</h3><p>Up to 140 characters, front-loaded with your top keywords so buyers find you in search.</p></div>
+      <div class="card"><div class="card-icon">✨</div><h3>Description</h3><p>A compelling product story that covers features, dimensions, materials, and care instructions.</p></div>
+      <div class="card"><div class="card-icon">🔖</div><h3>All 13 Tags</h3><p>Long-tail search phrases across gift occasions, materials, and style — all under 20 chars each.</p></div>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>Example Etsy Listing Output</h2>
+    <div class="demo-box">
+      <div class="demo-label">Etsy Title (138 chars)</div>
+      <div class="demo-title">Personalised Leather Keyring, Custom Name Keychain, Engraved Leather Gift, Birthday Gift For Him, Minimalist Keyring, Handmade Leather</div>
+      <div class="demo-label" style="margin-top:16px">Tags (13/13)</div>
+      <div class="tags-wrap">
+        <span class="tag-pill">personalised gift</span>
+        <span class="tag-pill">leather keyring</span>
+        <span class="tag-pill">custom keychain</span>
+        <span class="tag-pill">engraved leather</span>
+        <span class="tag-pill">gift for him</span>
+        <span class="tag-pill">birthday gift</span>
+        <span class="tag-pill">minimalist gift</span>
+        <span class="tag-pill">handmade</span>
+        <span class="tag-pill">leather accessory</span>
+        <span class="tag-pill">husband gift</span>
+        <span class="tag-pill">fathers day</span>
+        <span class="tag-pill">unique gift</span>
+        <span class="tag-pill">small leather goods</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>Etsy SEO Tips Built Into Every Listing</h2>
+    <div class="card-grid">
+      <div class="card"><div class="card-icon">📌</div><h3>Front-load Keywords</h3><p>Etsy shows ~55 chars in search. Listora puts your most important keywords first — every time.</p></div>
+      <div class="card"><div class="card-icon">🔍</div><h3>Long-tail Tags</h3><p>Buyers search for "personalised birthday gift for mum" not just "gift". Listora generates long-tail phrases.</p></div>
+      <div class="card"><div class="card-icon">🎯</div><h3>Gift Occasions</h3><p>Etsy traffic spikes around birthdays, Christmas, and Valentine's. Listora automatically includes occasion tags.</p></div>
+      <div class="card"><div class="card-icon">📖</div><h3>Story-driven Copy</h3><p>Etsy buyers connect with the maker. Listora's descriptions leave room for your story while covering every feature.</p></div>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>Frequently Asked Questions</h2>
+    <div class="faq">
+      <div class="faq-item"><button class="faq-q">How do I write a good Etsy listing?</button><div class="faq-a">A good Etsy listing uses a keyword-rich title (up to 140 chars), a benefit-focused description that tells your story, and all 13 tags using long-tail phrases your buyers actually search for.</div></div>
+      <div class="faq-item"><button class="faq-q">What are Etsy listing tags?</button><div class="faq-a">Etsy allows up to 13 tags per listing — short keyword phrases (up to 20 chars each) that Etsy uses to match your product to buyer searches. Using all 13 tags is essential for maximum visibility.</div></div>
+      <div class="faq-item"><button class="faq-q">How long should an Etsy title be?</button><div class="faq-a">Etsy titles can be up to 140 characters. Front-load your most important keywords since Etsy shows only the first 55–70 characters in search results.</div></div>
+      <div class="faq-item"><button class="faq-q">Is Listora free for Etsy sellers?</button><div class="faq-a">Yes. You get 3 free Etsy listings per day with no account or credit card required. Pro unlocks unlimited listings and AI-powered copy.</div></div>
+      <div class="faq-item"><button class="faq-q">Does Listora generate all 13 Etsy tags?</button><div class="faq-a">Yes. Listora automatically generates all 13 Etsy tags based on your product name, features, and category — covering long-tail buyer search phrases.</div></div>
+    </div>
+  </div>
+
+  <div class="cta-section">
+    <h2>Generate Your Etsy Listing Now — Free</h2>
+    <p>3 free listings per day. No account. No credit card.</p>
+    <a class="hero-cta" href="app.html">Start Generating →</a>
+  </div>
+</div>
+<footer><p>© 2026 Listora · <a href="index.html">Home</a> · <a href="app.html">Generator</a> · <a href="amazon-listing-generator.html">Amazon</a> · <a href="shopify-product-description.html">Shopify</a></p></footer>
+<script>document.querySelectorAll('.faq-q').forEach(function(b){b.addEventListener('click',function(){this.closest('.faq-item').classList.toggle('open')})});</script>
+</body>
+</html>

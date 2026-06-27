@@ -1,0 +1,657 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Listora — Product Listing Generator</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0a0d14;--surface:#111827;--surface2:#1f2937;--border:#2d3748;
+  --text:#f1f5f9;--muted:#94a3b8;--accent:#6366f1;--accent2:#8b5cf6;
+  --green:#10b981;--yellow:#f59e0b;--red:#ef4444;--radius:8px;
+}
+html,body{height:100%;background:var(--bg);color:var(--text);font:14px/1.6 system-ui,-apple-system,sans-serif}
+a{color:var(--accent);text-decoration:none}
+
+/* ── Shell ── */
+.shell{display:flex;flex-direction:column;height:100vh}
+.topbar{display:flex;align-items:center;justify-content:space-between;padding:0 20px;height:48px;background:var(--surface);border-bottom:1px solid var(--border);flex-shrink:0;gap:12px}
+.logo{font-size:18px;font-weight:900;white-space:nowrap}.logo span{color:var(--accent)}
+.topbar-center{display:flex;gap:6px}
+.plat-btn{padding:5px 12px;border-radius:6px;border:1px solid var(--border);background:transparent;color:var(--muted);font-size:12px;font-weight:600;cursor:pointer;transition:all .15s}
+.plat-btn.active{background:var(--accent);border-color:var(--accent);color:#fff}
+.topbar-right{display:flex;align-items:center;gap:10px;flex-shrink:0}
+.pro-badge{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;font-size:11px;font-weight:700;padding:3px 10px;border-radius:100px}
+.btn{padding:7px 16px;border-radius:var(--radius);border:none;font-size:13px;font-weight:700;cursor:pointer;display:inline-flex;align-items:center;gap:6px;transition:opacity .15s}
+.btn:hover{opacity:.85}
+.btn-primary{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff}
+.btn-ghost{background:transparent;color:var(--muted);border:1px solid var(--border)}
+.btn-green{background:var(--green);color:#fff}
+
+/* ── Main layout ── */
+.main{display:grid;grid-template-columns:400px 1fr;flex:1;overflow:hidden;min-height:0}
+
+/* ── Left panel ── */
+.panel{overflow-y:auto;padding:20px;border-right:1px solid var(--border);display:flex;flex-direction:column;gap:14px}
+.panel::-webkit-scrollbar{width:4px}
+.panel::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px}
+.sec-title{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:8px}
+.field{display:flex;flex-direction:column;gap:5px}
+.field label{font-size:12px;font-weight:600;color:var(--muted)}
+.field input,.field textarea,.field select{background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius);padding:9px 11px;color:var(--text);font-size:13px;font-family:inherit;resize:none;transition:border-color .15s;width:100%}
+.field input:focus,.field textarea:focus,.field select:focus{outline:none;border-color:var(--accent)}
+.field select option{background:var(--surface2)}
+.char-hint{font-size:11px;color:var(--muted);text-align:right;margin-top:2px}
+.features-list{display:flex;flex-direction:column;gap:6px}
+.feature-row{display:flex;gap:6px;align-items:center}
+.feature-row input{flex:1}
+.feature-num{width:20px;font-size:11px;font-weight:700;color:var(--muted);flex-shrink:0;text-align:center}
+.tone-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.tone-btn{padding:8px;border-radius:6px;border:1px solid var(--border);background:var(--surface2);color:var(--muted);font-size:12px;font-weight:600;cursor:pointer;text-align:center;transition:all .15s}
+.tone-btn.active{border-color:var(--accent);background:rgba(99,102,241,.12);color:var(--accent)}
+.divider{height:1px;background:var(--border);margin:2px 0}
+.generate-btn{width:100%;padding:12px;border-radius:var(--radius);border:none;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;font-size:15px;font-weight:800;cursor:pointer;transition:opacity .15s,transform .1s;margin-top:4px}
+.generate-btn:hover{opacity:.9;transform:translateY(-1px)}
+.generate-btn:active{transform:translateY(0)}
+.generate-btn:disabled{opacity:.5;cursor:not-allowed;transform:none}
+.free-count{text-align:center;font-size:12px;color:var(--muted);margin-top:6px}
+.free-count span{color:var(--yellow);font-weight:600}
+.ai-section{background:rgba(99,102,241,.06);border:1px solid rgba(99,102,241,.2);border-radius:var(--radius);padding:12px}
+.ai-toggle{display:flex;align-items:center;gap:8px;margin-bottom:8px}
+.ai-toggle input[type=checkbox]{accent-color:var(--accent);width:15px;height:15px}
+.ai-toggle label{font-size:13px;font-weight:600;cursor:pointer}
+.ai-key-field{display:none}
+.ai-key-field.show{display:flex;flex-direction:column;gap:4px}
+
+/* ── Right panel ── */
+.output{overflow-y:auto;padding:20px;display:flex;flex-direction:column;gap:16px}
+.output::-webkit-scrollbar{width:4px}
+.output::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px}
+.output-empty{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;color:var(--muted);text-align:center;gap:14px}
+.output-empty .icon{font-size:52px;opacity:.3}
+.output-empty h3{font-size:18px;font-weight:700;color:var(--text)}
+.output-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;overflow:hidden}
+.output-header{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;border-bottom:1px solid var(--border);background:var(--surface2)}
+.output-header-left{display:flex;align-items:center;gap:8px}
+.output-label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--muted)}
+.output-meta{font-size:11px;color:var(--muted)}
+.char-ok{color:var(--green)}
+.char-warn{color:var(--yellow)}
+.char-over{color:var(--red)}
+.output-body{padding:16px;font-size:14px;line-height:1.7;color:var(--text);white-space:pre-wrap;word-break:break-word}
+.bullets-list{padding:0;list-style:none;display:flex;flex-direction:column;gap:10px}
+.bullets-list li{padding:10px 12px;background:var(--surface2);border-radius:6px;border-left:3px solid var(--accent);font-size:13px;line-height:1.65}
+.bullets-list li strong{color:var(--accent)}
+.tags-wrap{display:flex;flex-wrap:wrap;gap:7px;padding:14px 16px}
+.tag-pill{background:var(--surface2);border:1px solid var(--border);border-radius:100px;padding:4px 12px;font-size:12px;color:var(--text)}
+.keywords-body{font-size:12px;line-height:1.8;padding:14px 16px;color:var(--muted);word-break:break-word}
+.copy-btn{display:inline-flex;align-items:center;gap:5px;padding:5px 12px;border-radius:6px;border:1px solid var(--border);background:transparent;color:var(--muted);font-size:11px;font-weight:600;cursor:pointer;transition:all .15s}
+.copy-btn:hover{border-color:var(--accent);color:var(--accent)}
+.copy-btn.copied{border-color:var(--green);color:var(--green)}
+.regen-btn{display:inline-flex;align-items:center;gap:5px;padding:5px 12px;border-radius:6px;border:1px solid var(--border);background:transparent;color:var(--muted);font-size:11px;font-weight:600;cursor:pointer;transition:all .15s}
+.regen-btn:hover{border-color:var(--accent2);color:var(--accent2)}
+.upgrade-nudge{background:linear-gradient(135deg,rgba(99,102,241,.1),rgba(139,92,246,.1));border:1px solid rgba(99,102,241,.25);border-radius:10px;padding:14px 16px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.upgrade-nudge p{font-size:13px;color:var(--muted)}
+.upgrade-nudge p strong{color:var(--text)}
+.loading-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:24px;text-align:center;color:var(--muted);font-size:14px}
+.spinner{width:32px;height:32px;border:3px solid var(--border);border-top-color:var(--accent);border-radius:50%;animation:spin .8s linear infinite;margin:0 auto 12px}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* ── Upgrade modal ── */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:100;display:flex;align-items:center;justify-content:center;padding:20px}
+.modal{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:36px;max-width:420px;width:100%;text-align:center}
+.modal h2{font-size:22px;font-weight:800;margin-bottom:10px}
+.modal p{color:var(--muted);font-size:14px;margin-bottom:24px;line-height:1.65}
+.modal-btns{display:flex;flex-direction:column;gap:10px}
+.modal-close{margin-top:14px;font-size:13px;color:var(--muted);cursor:pointer}
+.modal-close:hover{color:var(--text)}
+.hidden{display:none!important}
+
+@media(max-width:768px){
+  .main{grid-template-columns:1fr;grid-template-rows:auto 1fr}
+  .panel{max-height:55vh}
+  .shell{height:auto;overflow:visible}
+  html,body{height:auto}
+}
+</style>
+</head>
+<body>
+<div class="shell">
+
+  <!-- Top bar -->
+  <div class="topbar">
+    <a class="logo" href="index.html"><span>List</span>ora</a>
+    <div class="topbar-center">
+      <button class="plat-btn active" data-plat="amazon">🛒 Amazon</button>
+      <button class="plat-btn" data-plat="etsy">🎨 Etsy</button>
+      <button class="plat-btn" data-plat="shopify">🛍️ Shopify</button>
+      <button class="plat-btn" data-plat="ebay">📦 eBay</button>
+    </div>
+    <div class="topbar-right">
+      <span class="pro-badge hidden" id="pro-badge">⚡ PRO</span>
+      <button class="btn btn-ghost" id="upgrade-btn">Upgrade</button>
+    </div>
+  </div>
+
+  <!-- Main -->
+  <div class="main">
+
+    <!-- Left: inputs -->
+    <div class="panel">
+      <div>
+        <div class="sec-title">Product Details</div>
+        <div class="field">
+          <label>Product name *</label>
+          <input type="text" id="product-name" placeholder="e.g. Stainless Steel Water Bottle" maxlength="120">
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Category</label>
+        <select id="category">
+          <option value="general">General / Other</option>
+          <option value="kitchen">Kitchen & Home</option>
+          <option value="electronics">Electronics & Tech</option>
+          <option value="clothing">Clothing & Fashion</option>
+          <option value="beauty">Beauty & Personal Care</option>
+          <option value="sports">Sports & Outdoors</option>
+          <option value="toys">Toys & Kids</option>
+          <option value="health">Health & Wellness</option>
+          <option value="pets">Pet Supplies</option>
+          <option value="handmade">Handmade & Crafts</option>
+          <option value="jewelry">Jewellery & Accessories</option>
+          <option value="books">Books & Stationery</option>
+          <option value="garden">Garden & Outdoor</option>
+          <option value="automotive">Automotive</option>
+          <option value="tools">Tools & Hardware</option>
+          <option value="food">Food & Grocery</option>
+        </select>
+      </div>
+
+      <div>
+        <div class="field">
+          <label>Key features (enter up to 5)</label>
+        </div>
+        <div class="features-list">
+          <div class="feature-row"><span class="feature-num">1</span><input type="text" class="feature-input" placeholder="e.g. Double-wall insulated" maxlength="100"></div>
+          <div class="feature-row"><span class="feature-num">2</span><input type="text" class="feature-input" placeholder="e.g. 32oz capacity" maxlength="100"></div>
+          <div class="feature-row"><span class="feature-num">3</span><input type="text" class="feature-input" placeholder="e.g. Leak-proof lid" maxlength="100"></div>
+          <div class="feature-row"><span class="feature-num">4</span><input type="text" class="feature-input" placeholder="e.g. BPA-free stainless steel" maxlength="100"></div>
+          <div class="feature-row"><span class="feature-num">5</span><input type="text" class="feature-input" placeholder="e.g. Dishwasher safe" maxlength="100"></div>
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Target audience</label>
+        <input type="text" id="audience" placeholder="e.g. Gym-goers, hikers, office workers" maxlength="120">
+      </div>
+
+      <div class="field">
+        <label>Unique selling point / brand story</label>
+        <textarea id="usp" rows="2" placeholder="e.g. Premium brand, lifetime warranty, eco-friendly packaging" maxlength="300"></textarea>
+      </div>
+
+      <div class="field">
+        <label>Tone</label>
+        <div class="tone-grid">
+          <button class="tone-btn active" data-tone="professional">Professional</button>
+          <button class="tone-btn" data-tone="friendly">Friendly</button>
+          <button class="tone-btn" data-tone="premium">Premium / Luxury</button>
+          <button class="tone-btn" data-tone="urgency">Urgency / FOMO</button>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <!-- AI mode -->
+      <div class="ai-section">
+        <div class="ai-toggle">
+          <input type="checkbox" id="ai-mode" disabled>
+          <label for="ai-mode">⚡ AI Mode — GPT-4 powered <span style="font-size:11px;color:var(--accent);font-weight:600">(Pro)</span></label>
+        </div>
+        <div class="ai-key-field" id="ai-key-field">
+          <label style="font-size:11px;color:var(--muted)">Your OpenAI API key (stored locally, never sent to our servers)</label>
+          <input type="password" id="ai-key" placeholder="sk-...">
+        </div>
+        <p style="font-size:11px;color:var(--muted);margin-top:4px">Upgrade to Pro to unlock GPT-4 powered listings with deeper product understanding and more compelling copy.</p>
+      </div>
+
+      <button class="generate-btn" id="generate-btn">✨ Generate Listing</button>
+      <p class="free-count" id="free-count"></p>
+    </div>
+
+    <!-- Right: output -->
+    <div class="output" id="output-panel">
+      <div class="output-empty" id="empty-state">
+        <div class="icon">📝</div>
+        <h3>Your listing will appear here</h3>
+        <p style="font-size:13px;color:var(--muted);max-width:320px">Fill in your product details on the left, then hit Generate. Your Amazon title, bullets, description, and keywords are ready in seconds.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Upgrade modal -->
+<div class="modal-overlay hidden" id="modal">
+  <div class="modal">
+    <div style="font-size:36px;margin-bottom:12px">⚡</div>
+    <h2>You've hit the free limit</h2>
+    <p>Free users get <strong>3 listings per day</strong>. Upgrade to Pro for unlimited listings, AI mode, bulk generation, and CSV export.</p>
+    <div class="modal-btns">
+      <button class="btn btn-primary" style="width:100%;padding:13px;font-size:15px;justify-content:center" id="modal-pro-btn">Get Pro — $49/mo →</button>
+      <button class="btn" style="width:100%;padding:13px;font-size:15px;justify-content:center;background:var(--green);color:#fff" id="modal-ltd-btn">🔥 Lifetime Deal — $149 (once)</button>
+    </div>
+    <div class="modal-close" id="modal-close">Maybe later</div>
+  </div>
+</div>
+
+<script src="pricing.js"></script>
+<script>
+(function(){
+  var PRO_KEY   = 'listora.pro.v1';
+  var FREE_KEY  = 'listora.free.v1';
+  var FREE_MAX  = 3;
+  var platform  = 'amazon';
+  var tone      = 'professional';
+
+  /* ── Pro check ── */
+  function isPro(){ return localStorage.getItem(PRO_KEY)==='1'; }
+  function refreshProUI(){
+    var pro = isPro();
+    document.getElementById('pro-badge').classList.toggle('hidden', !pro);
+    document.getElementById('upgrade-btn').classList.toggle('hidden', pro);
+    var aiCb = document.getElementById('ai-mode');
+    aiCb.disabled = !pro;
+    if (!pro) { aiCb.checked = false; document.getElementById('ai-key-field').classList.remove('show'); }
+  }
+
+  /* Stripe activation via ?pro=success */
+  if (location.search.includes('pro=success')){ localStorage.setItem(PRO_KEY,'1'); history.replaceState({},'',location.pathname); }
+  refreshProUI();
+
+  /* ── Daily free count ── */
+  function getToday(){ return new Date().toISOString().slice(0,10); }
+  function getFreeData(){
+    try{ return JSON.parse(localStorage.getItem(FREE_KEY)||'{}'); }catch(e){ return {}; }
+  }
+  function getFreeUsed(){
+    var d = getFreeData(); return d[getToday()]||0;
+  }
+  function incrementFree(){
+    var d = getFreeData(); d[getToday()]=(d[getToday()]||0)+1;
+    localStorage.setItem(FREE_KEY, JSON.stringify(d));
+  }
+  function updateFreeCount(){
+    var el = document.getElementById('free-count');
+    if (isPro()){ el.textContent=''; return; }
+    var used = getFreeUsed(), left = Math.max(0, FREE_MAX - used);
+    el.innerHTML = '<span>' + left + ' free listing' + (left===1?'':'s') + ' remaining today</span>';
+    el.querySelector('span').style.color = left===0?'var(--red)':left===1?'var(--yellow)':'var(--green)';
+  }
+  updateFreeCount();
+
+  /* ── Platform tabs ── */
+  document.querySelectorAll('.plat-btn').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      platform = btn.dataset.plat;
+      document.querySelectorAll('.plat-btn').forEach(function(b){ b.classList.remove('active'); });
+      btn.classList.add('active');
+    });
+  });
+
+  /* ── Tone buttons ── */
+  document.querySelectorAll('.tone-btn').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      tone = btn.dataset.tone;
+      document.querySelectorAll('.tone-btn').forEach(function(b){ b.classList.remove('active'); });
+      btn.classList.add('active');
+    });
+  });
+
+  /* ── AI mode toggle ── */
+  document.getElementById('ai-mode').addEventListener('change', function(){
+    document.getElementById('ai-key-field').classList.toggle('show', this.checked);
+  });
+
+  /* ── Upgrade modal ── */
+  function showUpgrade(){
+    document.getElementById('modal').classList.remove('hidden');
+  }
+  document.getElementById('modal-close').addEventListener('click', function(){
+    document.getElementById('modal').classList.add('hidden');
+  });
+  document.getElementById('upgrade-btn').addEventListener('click', showUpgrade);
+  document.getElementById('modal-pro-btn').addEventListener('click', function(){
+    window.LISTORA_CHECKOUT && window.LISTORA_CHECKOUT('monthly');
+  });
+  document.getElementById('modal-ltd-btn').addEventListener('click', function(){
+    window.LISTORA_CHECKOUT && window.LISTORA_CHECKOUT('lifetime');
+  });
+
+  /* ── Copy helper ── */
+  function copyText(text, btn){
+    navigator.clipboard.writeText(text).then(function(){
+      btn.textContent = '✓ Copied!';
+      btn.classList.add('copied');
+      setTimeout(function(){ btn.textContent = '⎘ Copy'; btn.classList.remove('copied'); }, 1800);
+    });
+  }
+
+  /* ── Output card builder ── */
+  function makeCard(label, meta, bodyHtml, textToCopy){
+    var card = document.createElement('div');
+    card.className = 'output-card';
+    var copyBtn = '<button class="copy-btn">⎘ Copy</button>';
+    var regenBtn = isPro() ? '<button class="regen-btn">↻ Vary</button>' : '';
+    card.innerHTML = '<div class="output-header"><div class="output-header-left"><span class="output-label">'+label+'</span>'+(meta?'<span class="output-meta">'+meta+'</span>':'')+'</div><div style="display:flex;gap:6px">'+regenBtn+copyBtn+'</div></div><div class="output-body">'+bodyHtml+'</div>';
+    card.querySelector('.copy-btn').addEventListener('click', function(){
+      copyText(textToCopy, this);
+    });
+    return card;
+  }
+
+  /* ─────────────────────────────────────────────
+     LISTING GENERATOR (smart template engine)
+  ───────────────────────────────────────────── */
+  function getFeatures(){
+    return Array.from(document.querySelectorAll('.feature-input'))
+      .map(function(i){ return i.value.trim(); })
+      .filter(Boolean);
+  }
+
+  var CATEGORY_KEYWORDS = {
+    kitchen: ['kitchen','home','cooking','BPA-free','food-grade'],
+    electronics: ['compatible','USB','wireless','rechargeable','high-performance'],
+    clothing: ['machine washable','soft','comfortable','breathable','premium fabric'],
+    beauty: ['dermatologist tested','cruelty-free','paraben-free','natural','skin-safe'],
+    sports: ['lightweight','durable','weather-resistant','performance','ergonomic'],
+    toys: ['child-safe','non-toxic','educational','age-appropriate','BPA-free'],
+    health: ['doctor recommended','clinically tested','natural','certified','safe'],
+    pets: ['veterinarian recommended','pet-safe','durable','easy to clean','non-toxic'],
+    handmade: ['handcrafted','unique','artisan','one-of-a-kind','small batch'],
+    jewelry: ['hypoallergenic','nickel-free','tarnish-resistant','sterling silver','gift-ready'],
+    books: ['illustrated','comprehensive','beginner-friendly','step-by-step','expert'],
+    garden: ['weather-resistant','UV-protected','easy assembly','outdoor-grade','durable'],
+    automotive: ['universal fit','easy install','high-performance','OEM quality','certified'],
+    tools: ['professional grade','heavy-duty','ergonomic grip','precision','durable'],
+    food: ['organic','non-GMO','gluten-free','natural ingredients','no artificial'],
+    general: ['premium','high-quality','durable','versatile','professional'],
+  };
+
+  var TONE_OPENERS = {
+    professional: ['Designed for','Built for','Engineered for','Trusted by','The professional choice for'],
+    friendly:     ['Perfect for','Great for','Made for','Loved by','Ideal for'],
+    premium:      ['Crafted for the discerning','Exclusively for','The luxury choice for','Reserved for','For those who demand'],
+    urgency:      ['Don\'t miss out —','Limited stock:','The #1 choice for','Act now —','Join thousands of'],
+  };
+
+  var BULLET_PREFIXES = {
+    professional: ['SUPERIOR','OPTIMISED','ENGINEERED','GUARANTEED','CERTIFIED'],
+    friendly:     ['PERFECT','LOVE IT','EASY','ENJOY','DESIGNED'],
+    premium:      ['PREMIUM','LUXURY','EXCLUSIVE','EXCEPTIONAL','FLAWLESS'],
+    urgency:      ['LIMITED','BEST-SELLER','#1 CHOICE','TOP RATED','MUST-HAVE'],
+  };
+
+  function toTitleCase(str){
+    return str.replace(/\w\S*/g,function(t){return t.charAt(0).toUpperCase()+t.substr(1).toLowerCase()});
+  }
+
+  function generateAmazonTitle(name, features, audience, categoryKws){
+    var parts = [name];
+    if (features[0]) parts.push(features[0]);
+    if (features[1]) parts.push(features[1]);
+    var extraKws = categoryKws.slice(0,2).join(', ');
+    if (extraKws) parts.push(extraKws);
+    if (audience) parts.push('For ' + audience.split(',')[0].trim());
+    var title = parts.join(' | ');
+    if (title.length > 200) title = title.slice(0, 197) + '...';
+    return title;
+  }
+
+  function generateEtsyTitle(name, features, categoryKws){
+    var parts = [name];
+    features.slice(0,2).forEach(function(f){ parts.push(f); });
+    categoryKws.slice(0,2).forEach(function(k){ parts.push(toTitleCase(k)); });
+    return parts.join(', ').slice(0,140);
+  }
+
+  function generateShopifyTitle(name, features){
+    return name + (features[0] ? ' — ' + features[0] : '') + (features[1] ? ' | ' + features[1] : '');
+  }
+
+  function generateTitle(name, features, audience, cat){
+    var kws = CATEGORY_KEYWORDS[cat]||CATEGORY_KEYWORDS.general;
+    if (platform==='amazon') return generateAmazonTitle(name, features, audience, kws);
+    if (platform==='etsy')   return generateEtsyTitle(name, features, kws);
+    if (platform==='shopify') return generateShopifyTitle(name, features);
+    return generateAmazonTitle(name, features, audience, kws); // ebay
+  }
+
+  function generateBullets(name, features, audience, usp, tone){
+    var prefixes = BULLET_PREFIXES[tone]||BULLET_PREFIXES.professional;
+    var bullets = [];
+    var usedFeatures = features.slice(0,5);
+
+    // Fill with generic if fewer than 5 features
+    var fallbacks = ['premium quality','easy to use','versatile design','perfect gift idea','satisfaction guaranteed'];
+    while(usedFeatures.length < 5) usedFeatures.push(fallbacks[usedFeatures.length]);
+
+    var benefitMap = {
+      professional: [' — built to perform when it matters most.',' — engineered for reliability you can count on.',' — so you can focus on results, not problems.',' — trusted by professionals who demand the best.',' — backed by our quality guarantee.'],
+      friendly:     [' — you\'re going to love how well this works!',' — makes life so much easier every day!',' — exactly what you\'ve been looking for!',' — a small upgrade that makes a big difference!',' — we think you\'ll be obsessed.'],
+      premium:      [' — crafted to the highest standard for those who accept nothing less.',' — an investment in quality that speaks for itself.',' — the refined choice for the discerning buyer.',' — where performance meets elegance.',' — excellence in every detail.'],
+      urgency:      [' — this is why it\'s our best-seller!',' — selling fast, get yours before stock runs out!',' — join thousands of happy customers today!',' — don\'t settle for less when the best is right here!',' — act now while stocks last!'],
+    };
+    var bm = benefitMap[tone]||benefitMap.professional;
+
+    usedFeatures.forEach(function(feat, i){
+      var pfx = prefixes[i%prefixes.length];
+      var feat_cap = feat.charAt(0).toUpperCase()+feat.slice(1);
+      bullets.push('<strong>'+pfx+':</strong> '+feat_cap+bm[i%bm.length]);
+    });
+    return bullets;
+  }
+
+  function generateDescription(name, features, audience, usp, tone){
+    var opener = (TONE_OPENERS[tone]||TONE_OPENERS.professional);
+    var op = opener[Math.floor(Math.random()*opener.length)];
+    var aud = audience || 'everyday users';
+    var feat_list = features.slice(0,3).join(', ') || 'exceptional quality';
+    var uspText = usp ? '\n\n' + usp : '';
+
+    var descs = {
+      professional: op+' '+aud+', the '+name+' combines '+feat_list+' in a product built to perform. Every detail has been carefully considered to deliver a reliable, high-quality experience you can depend on day after day.'+uspText+'\n\nWhether you\'re a seasoned professional or just starting out, this is the product that removes friction and delivers results. Add it to your cart today.',
+      friendly: op+' '+aud+'! The '+name+' brings you '+feat_list+' in one awesome package. We designed this with real people in mind — people who want something that just works, looks great, and makes life a little better every day.'+uspText+'\n\nWe think you\'ll absolutely love it. Grab yours today and see what all the fuss is about!',
+      premium: 'Introducing the '+name+' — crafted for the discerning '+aud.split(',')[0].trim()+' who refuses to compromise. Featuring '+feat_list+', this is a product in a category of its own.'+uspText+'\n\nExperience the difference that premium quality makes. Add to cart and elevate your everyday.',
+      urgency: 'The '+name+' is the #1 choice for '+aud+' — and it\'s easy to see why. With '+feat_list+', this best-seller delivers results that speak for themselves.'+uspText+'\n\n⚠️ Stock is limited. Join thousands of happy customers who already made the switch. Order now before it sells out.',
+    };
+    return (descs[tone]||descs.professional);
+  }
+
+  function generateKeywords(name, features, audience, cat){
+    var kws = CATEGORY_KEYWORDS[cat]||CATEGORY_KEYWORDS.general;
+    var terms = [name.toLowerCase()];
+    features.forEach(function(f){ if(f) terms.push(f.toLowerCase()); });
+    if(audience) terms.push(audience.toLowerCase());
+    kws.forEach(function(k){ terms.push(k); });
+    // Add common long-tail qualifiers
+    ['best','premium','high quality','professional','buy','cheap','top rated'].forEach(function(q){
+      terms.push(q + ' ' + name.toLowerCase());
+    });
+    // Deduplicate and join
+    var seen = {};
+    var unique = terms.filter(function(t){ if(seen[t]) return false; seen[t]=true; return t.length>1; });
+    return unique.join(', ').slice(0,249);
+  }
+
+  function generateEtsyTags(name, features, cat){
+    var kws = CATEGORY_KEYWORDS[cat]||CATEGORY_KEYWORDS.general;
+    var tags = [name];
+    features.forEach(function(f){ if(f && f.length<20) tags.push(f); });
+    kws.forEach(function(k){ tags.push(k); });
+    ['gift for her','gift for him','birthday gift','handmade','unique gift'].forEach(function(t){ tags.push(t); });
+    return tags.slice(0,13).map(function(t){ return t.trim().toLowerCase().slice(0,20); });
+  }
+
+  /* ── Render output ── */
+  function renderOutput(result){
+    var panel = document.getElementById('output-panel');
+    panel.innerHTML = '';
+
+    // Title
+    var titleLen = result.title.length;
+    var titleMeta = '<span class="'+(titleLen<=200?'char-ok':titleLen<=210?'char-warn':'char-over')+'">'+titleLen+' chars</span>';
+    panel.appendChild(makeCard('Title', titleMeta, '<span style="font-size:15px;font-weight:600;color:var(--text)">'+escHtml(result.title)+'</span>', result.title));
+
+    // Bullets
+    var bulletsCard = document.createElement('div');
+    bulletsCard.className = 'output-card';
+    var bullPlaintext = result.bullets.map(function(b){ return b.replace(/<[^>]+>/g,''); }).join('\n');
+    bulletsCard.innerHTML = '<div class="output-header"><div class="output-header-left"><span class="output-label">Bullet Points</span><span class="output-meta">'+result.bullets.length+' bullets</span></div><button class="copy-btn">⎘ Copy</button></div>';
+    var ul = document.createElement('ul');
+    ul.className = 'bullets-list';
+    ul.style.padding = '12px 16px 16px';
+    result.bullets.forEach(function(b){
+      var li = document.createElement('li');
+      li.innerHTML = b;
+      ul.appendChild(li);
+    });
+    bulletsCard.appendChild(ul);
+    bulletsCard.querySelector('.copy-btn').addEventListener('click', function(){ copyText(bullPlaintext, this); });
+    panel.appendChild(bulletsCard);
+
+    // Description
+    panel.appendChild(makeCard('Product Description', platform==='amazon'?'A+ Content ready':'', escHtml(result.description).replace(/\n/g,'<br>'), result.description));
+
+    // Keywords / Tags
+    if (platform==='etsy') {
+      var tagsCard = document.createElement('div');
+      tagsCard.className = 'output-card';
+      var tagsText = result.tags.join(', ');
+      tagsCard.innerHTML = '<div class="output-header"><div class="output-header-left"><span class="output-label">Etsy Tags</span><span class="output-meta">'+result.tags.length+'/13 tags</span></div><button class="copy-btn">⎘ Copy</button></div>';
+      var tagsWrap = document.createElement('div');
+      tagsWrap.className = 'tags-wrap';
+      result.tags.forEach(function(t){
+        var pill = document.createElement('span');
+        pill.className = 'tag-pill';
+        pill.textContent = t;
+        tagsWrap.appendChild(pill);
+      });
+      tagsCard.appendChild(tagsWrap);
+      tagsCard.querySelector('.copy-btn').addEventListener('click', function(){ copyText(tagsText, this); });
+      panel.appendChild(tagsCard);
+    } else {
+      var kwCard = document.createElement('div');
+      kwCard.className = 'output-card';
+      var kwText = result.keywords;
+      kwCard.innerHTML = '<div class="output-header"><div class="output-header-left"><span class="output-label">Backend Keywords</span><span class="output-meta">'+kwText.length+'/249 chars</span></div><button class="copy-btn">⎘ Copy</button></div><div class="keywords-body">'+escHtml(kwText)+'</div>';
+      kwCard.querySelector('.copy-btn').addEventListener('click', function(){ copyText(kwText, this); });
+      panel.appendChild(kwCard);
+    }
+
+    // Copy all
+    var allText = 'TITLE:\n'+result.title+'\n\nBULLETS:\n'+result.bullets.map(function(b){return b.replace(/<[^>]+>/g,'');}).join('\n')+'\n\nDESCRIPTION:\n'+result.description+(result.keywords?'\n\nKEYWORDS:\n'+result.keywords:'')+(result.tags?'\n\nTAGS:\n'+result.tags.join(', '):'');
+    var allCard = document.createElement('div');
+    allCard.style.cssText='display:flex;gap:10px;align-items:center;flex-wrap:wrap;padding:4px 0';
+    var copyAllBtn = document.createElement('button');
+    copyAllBtn.className='btn btn-green';
+    copyAllBtn.innerHTML='⎘ Copy Everything';
+    copyAllBtn.addEventListener('click', function(){ copyText(allText, this); });
+    allCard.appendChild(copyAllBtn);
+    if(!isPro()){
+      var nudge = document.createElement('div');
+      nudge.className='upgrade-nudge';
+      nudge.style.flex='1';
+      nudge.innerHTML='<p><strong>Want AI-powered listings?</strong> Upgrade to Pro for GPT-4 mode, unlimited generations, and bulk export.</p><button class="btn btn-primary" id="nudge-upgrade">Upgrade →</button>';
+      nudge.querySelector('#nudge-upgrade').addEventListener('click', function(){ document.getElementById('modal').classList.remove('hidden'); });
+      allCard.appendChild(nudge);
+    }
+    panel.appendChild(allCard);
+  }
+
+  function escHtml(str){ return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+  /* ── AI generation via OpenAI ── */
+  async function generateWithAI(data){
+    var key = document.getElementById('ai-key').value.trim();
+    if(!key){ alert('Please enter your OpenAI API key in the AI Mode section.'); return null; }
+
+    var prompt = 'You are an expert e-commerce copywriter specialised in '+data.platform.toUpperCase()+' listings. Write a complete product listing for the following product.\n\nProduct: '+data.name+'\nCategory: '+data.category+'\nKey features: '+data.features.join(', ')+'\nTarget audience: '+data.audience+'\nUnique selling point: '+data.usp+'\nTone: '+data.tone+'\n\nReturn a JSON object with these fields:\n- title: string (for '+data.platform+', follow character limits and best practices)\n- bullets: array of 5 strings (benefit-first format, HTML bold tags on the leading benefit keyword)\n- description: string (2-3 paragraphs, compelling)\n- keywords: string (for Amazon backend keywords, comma separated, under 249 chars) or tags: array of 13 strings (for Etsy)\n\nReturn ONLY valid JSON, no markdown.';
+
+    try {
+      var resp = await fetch('https://api.openai.com/v1/chat/completions',{
+        method:'POST',
+        headers:{'Content-Type':'application/json','Authorization':'Bearer '+key},
+        body:JSON.stringify({model:'gpt-4o-mini',messages:[{role:'user',content:prompt}],temperature:0.7,max_tokens:1200})
+      });
+      if(!resp.ok){ var e=await resp.json(); throw new Error(e.error?.message||'API error'); }
+      var json = await resp.json();
+      var content = json.choices[0].message.content.trim();
+      return JSON.parse(content);
+    } catch(e){
+      alert('AI error: '+(e.message||e)); return null;
+    }
+  }
+
+  /* ── Generate button ── */
+  document.getElementById('generate-btn').addEventListener('click', async function(){
+    var name = document.getElementById('product-name').value.trim();
+    if(!name){ document.getElementById('product-name').focus(); return; }
+
+    var used = getFreeUsed();
+    if(!isPro() && used >= FREE_MAX){ showUpgrade(); return; }
+
+    var features = getFeatures();
+    var audience = document.getElementById('audience').value.trim();
+    var usp = document.getElementById('usp').value.trim();
+    var cat = document.getElementById('category').value;
+
+    var btn = this;
+    btn.disabled = true;
+    btn.textContent = '⏳ Generating...';
+
+    // Show spinner
+    var panel = document.getElementById('output-panel');
+    panel.innerHTML = '<div class="loading-card"><div class="spinner"></div><p>Writing your '+platform+' listing…</p></div>';
+
+    var result;
+    var aiMode = document.getElementById('ai-mode').checked && isPro();
+
+    if(aiMode){
+      var aiResult = await generateWithAI({name,features,audience,usp,platform,tone,category:cat});
+      if(aiResult){
+        result = {
+          title: aiResult.title||'',
+          bullets: Array.isArray(aiResult.bullets)?aiResult.bullets:[],
+          description: aiResult.description||'',
+          keywords: aiResult.keywords||'',
+          tags: aiResult.tags||[],
+        };
+      }
+    }
+
+    if(!result){
+      // Smart template generation
+      await new Promise(function(r){ setTimeout(r, 600); }); // fake brief delay for UX
+      var title = generateTitle(name, features, audience, cat);
+      var bullets = generateBullets(name, features, audience, usp, tone);
+      var description = generateDescription(name, features, audience, usp, tone);
+      var keywords = generateKeywords(name, features, audience, cat);
+      var tags = generateEtsyTags(name, features, cat);
+      result = {title, bullets, description, keywords, tags};
+    }
+
+    if(!isPro()) incrementFree();
+    updateFreeCount();
+
+    renderOutput(result);
+    btn.disabled = false;
+    btn.textContent = '✨ Generate Listing';
+  });
+
+  updateFreeCount();
+})();
+</script>
+</body>
+</html>
