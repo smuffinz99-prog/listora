@@ -4,7 +4,7 @@
  * Create at: dashboard.stripe.com → Payment Links → + New
  */
 (function(){
-  var MONTHLY_LINK = 'https://buy.stripe.com/REPLACE_MONTHLY';
+  var MONTHLY_LINK = 'https://buy.stripe.com/fZu6oG26NaXAerp9zbb3q02';
 
   window.LISTORA_CHECKOUT = function(plan){
     var url = MONTHLY_LINK;
