@@ -43,6 +43,9 @@ a{color:var(--accent);text-decoration:none}
 .feature-row input{flex:1;background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:7px 10px;color:var(--text);font-size:12px;font-family:inherit}
 .feature-row input:focus{outline:none;border-color:var(--accent)}
 .feature-num{width:18px;font-size:10px;font-weight:700;color:var(--muted);flex-shrink:0;text-align:center}
+.remove-feat{width:20px;height:20px;border-radius:4px;border:1px solid var(--border);background:transparent;color:var(--muted);font-size:14px;line-height:1;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;padding:0}
+.remove-feat:hover{border-color:var(--red);color:var(--red)}
+.remove-feat.hidden{visibility:hidden}
 .tone-grid{display:grid;grid-template-columns:1fr 1fr;gap:5px}
 .tone-btn{padding:7px;border-radius:6px;border:1px solid var(--border);background:var(--surface2);color:var(--muted);font-size:11px;font-weight:600;cursor:pointer;text-align:center;transition:all .15s}
 .tone-btn.active{border-color:var(--accent);background:rgba(99,102,241,.12);color:var(--accent)}
@@ -197,35 +200,111 @@ a{color:var(--accent);text-decoration:none}
 
       <div class="field">
         <label>Category</label>
-        <select id="category">
-          <option value="general">General / Other</option>
-          <option value="kitchen">Kitchen & Home</option>
-          <option value="electronics">Electronics & Tech</option>
-          <option value="clothing">Clothing & Fashion</option>
-          <option value="beauty">Beauty & Personal Care</option>
-          <option value="sports">Sports & Outdoors</option>
-          <option value="toys">Toys & Kids</option>
-          <option value="health">Health & Wellness</option>
-          <option value="pets">Pet Supplies</option>
-          <option value="handmade">Handmade & Crafts</option>
-          <option value="jewelry">Jewellery & Accessories</option>
-          <option value="garden">Garden & Outdoor</option>
-          <option value="automotive">Automotive</option>
-          <option value="tools">Tools & Hardware</option>
-          <option value="food">Food & Grocery</option>
+        <input type="text" id="cat-search" placeholder="🔍 Search categories…" autocomplete="off" style="margin-bottom:5px">
+        <select id="category" size="1">
+          <optgroup label="— General —">
+            <option value="general">General / Other</option>
+          </optgroup>
+          <optgroup label="— Home & Living —">
+            <option value="kitchen">Kitchen & Cooking</option>
+            <option value="home_decor">Home Décor</option>
+            <option value="furniture">Furniture</option>
+            <option value="bedding">Bedding & Pillows</option>
+            <option value="bathroom">Bathroom & Towels</option>
+            <option value="cleaning">Cleaning & Laundry</option>
+            <option value="storage">Storage & Organisation</option>
+            <option value="lighting">Lighting & Lamps</option>
+          </optgroup>
+          <optgroup label="— Electronics —">
+            <option value="electronics">Electronics & Tech</option>
+            <option value="phone_accessories">Phone Accessories</option>
+            <option value="audio">Audio & Headphones</option>
+            <option value="gaming">Gaming & Consoles</option>
+            <option value="cameras">Cameras & Photography</option>
+            <option value="computers">Computers & Laptops</option>
+            <option value="smart_home">Smart Home</option>
+            <option value="cables">Cables & Chargers</option>
+          </optgroup>
+          <optgroup label="— Fashion —">
+            <option value="clothing">Clothing & Apparel</option>
+            <option value="shoes">Shoes & Footwear</option>
+            <option value="bags">Bags & Luggage</option>
+            <option value="jewelry">Jewellery & Accessories</option>
+            <option value="watches">Watches</option>
+            <option value="sunglasses">Sunglasses & Eyewear</option>
+            <option value="hats">Hats & Caps</option>
+          </optgroup>
+          <optgroup label="— Beauty & Health —">
+            <option value="beauty">Beauty & Skincare</option>
+            <option value="haircare">Hair Care</option>
+            <option value="makeup">Makeup & Cosmetics</option>
+            <option value="fragrance">Fragrance & Perfume</option>
+            <option value="health">Health & Wellness</option>
+            <option value="vitamins">Vitamins & Supplements</option>
+            <option value="fitness_eq">Fitness Equipment</option>
+            <option value="personal_care">Personal Care</option>
+          </optgroup>
+          <optgroup label="— Sports & Outdoors —">
+            <option value="sports">Sports & Outdoors</option>
+            <option value="camping">Camping & Hiking</option>
+            <option value="cycling">Cycling</option>
+            <option value="fishing">Fishing</option>
+            <option value="water_sports">Water Sports</option>
+            <option value="yoga">Yoga & Pilates</option>
+            <option value="running">Running & Athletics</option>
+          </optgroup>
+          <optgroup label="— Kids & Baby —">
+            <option value="toys">Toys & Games</option>
+            <option value="baby">Baby & Infant</option>
+            <option value="kids_clothing">Kids Clothing</option>
+            <option value="school">School & Stationery</option>
+            <option value="nursery">Nursery & Furniture</option>
+          </optgroup>
+          <optgroup label="— Pets —">
+            <option value="pets">Pet Supplies</option>
+            <option value="dog">Dog Accessories</option>
+            <option value="cat">Cat Accessories</option>
+            <option value="aquarium">Aquarium & Fish</option>
+          </optgroup>
+          <optgroup label="— Garden & DIY —">
+            <option value="garden">Garden & Outdoor</option>
+            <option value="tools">Tools & Hardware</option>
+            <option value="automotive">Automotive</option>
+            <option value="plumbing">Plumbing & Electrical</option>
+            <option value="paint">Paint & Decorating</option>
+          </optgroup>
+          <optgroup label="— Handmade & Craft —">
+            <option value="handmade">Handmade & Crafts</option>
+            <option value="art_supplies">Art Supplies</option>
+            <option value="sewing">Sewing & Fabric</option>
+            <option value="candles">Candles & Wax Melts</option>
+            <option value="prints">Art Prints & Posters</option>
+            <option value="wedding">Wedding & Events</option>
+          </optgroup>
+          <optgroup label="— Food & Drink —">
+            <option value="food">Food & Grocery</option>
+            <option value="coffee">Coffee & Tea</option>
+            <option value="snacks">Snacks & Confectionery</option>
+          </optgroup>
+          <optgroup label="— Office & Business —">
+            <option value="office">Office Supplies</option>
+            <option value="books">Books & Education</option>
+            <option value="music_instruments">Musical Instruments</option>
+          </optgroup>
         </select>
       </div>
 
       <div>
-        <div class="field" style="margin-bottom:5px">
-          <label>Key features / specs (up to 5)</label>
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:5px">
+          <label style="font-size:12px;font-weight:600;color:var(--muted)">Key features / specs</label>
+          <button id="add-feature-btn" style="padding:3px 9px;border-radius:5px;border:1px solid var(--accent);background:transparent;color:var(--accent);font-size:11px;font-weight:700;cursor:pointer">+ Add</button>
         </div>
-        <div class="features-list">
-          <div class="feature-row"><span class="feature-num">1</span><input type="text" class="feature-input" placeholder="e.g. Double-wall insulated" maxlength="100"></div>
-          <div class="feature-row"><span class="feature-num">2</span><input type="text" class="feature-input" placeholder="e.g. 32oz capacity" maxlength="100"></div>
-          <div class="feature-row"><span class="feature-num">3</span><input type="text" class="feature-input" placeholder="e.g. Leak-proof lid" maxlength="100"></div>
-          <div class="feature-row"><span class="feature-num">4</span><input type="text" class="feature-input" placeholder="e.g. BPA-free stainless steel" maxlength="100"></div>
-          <div class="feature-row"><span class="feature-num">5</span><input type="text" class="feature-input" placeholder="e.g. Dishwasher safe" maxlength="100"></div>
+        <div class="features-list" id="features-list">
+          <div class="feature-row"><span class="feature-num">1</span><input type="text" class="feature-input" placeholder="e.g. Double-wall insulated" maxlength="100"><button class="remove-feat hidden" title="Remove">×</button></div>
+          <div class="feature-row"><span class="feature-num">2</span><input type="text" class="feature-input" placeholder="e.g. 32oz capacity" maxlength="100"><button class="remove-feat hidden" title="Remove">×</button></div>
+          <div class="feature-row"><span class="feature-num">3</span><input type="text" class="feature-input" placeholder="e.g. Leak-proof lid" maxlength="100"><button class="remove-feat hidden" title="Remove">×</button></div>
+          <div class="feature-row"><span class="feature-num">4</span><input type="text" class="feature-input" placeholder="e.g. BPA-free stainless steel" maxlength="100"><button class="remove-feat hidden" title="Remove">×</button></div>
+          <div class="feature-row"><span class="feature-num">5</span><input type="text" class="feature-input" placeholder="e.g. Dishwasher safe" maxlength="100"><button class="remove-feat hidden" title="Remove">×</button></div>
         </div>
       </div>
 
@@ -899,6 +978,58 @@ a{color:var(--accent);text-decoration:none}
     document.querySelector('[data-tab="listing"]').classList.add('active');
     renderListingTab(result);
   });
+
+  /* ── Category search ── */
+  document.getElementById('cat-search').addEventListener('input', function(){
+    var q = this.value.toLowerCase();
+    var sel = document.getElementById('category');
+    Array.from(sel.options).forEach(function(opt){
+      var matches = opt.text.toLowerCase().indexOf(q) !== -1 || opt.value.toLowerCase().indexOf(q) !== -1;
+      opt.style.display = (!q || matches) ? '' : 'none';
+    });
+    // Show/hide optgroups based on whether they have visible children
+    Array.from(sel.querySelectorAll('optgroup')).forEach(function(grp){
+      var hasVisible = Array.from(grp.querySelectorAll('option')).some(function(o){ return o.style.display !== 'none'; });
+      grp.style.display = hasVisible ? '' : 'none';
+    });
+    // Auto-select first visible match when typing
+    if(q){
+      var first = Array.from(sel.options).find(function(o){ return o.style.display !== 'none' && o.value; });
+      if(first) sel.value = first.value;
+    }
+  });
+
+  /* ── Add / remove features ── */
+  function renumberFeatures(){
+    Array.from(document.querySelectorAll('#features-list .feature-row')).forEach(function(row, i){
+      row.querySelector('.feature-num').textContent = i + 1;
+      // Show remove button only when more than 1 row
+      var btn = row.querySelector('.remove-feat');
+      btn.classList.toggle('hidden', document.querySelectorAll('#features-list .feature-row').length <= 1);
+    });
+  }
+
+  document.getElementById('add-feature-btn').addEventListener('click', function(){
+    var list = document.getElementById('features-list');
+    var count = list.querySelectorAll('.feature-row').length;
+    var row = document.createElement('div');
+    row.className = 'feature-row';
+    row.innerHTML = '<span class="feature-num">'+(count+1)+'</span><input type="text" class="feature-input" placeholder="e.g. Feature '+(count+1)+'" maxlength="100"><button class="remove-feat" title="Remove">×</button>';
+    row.querySelector('.remove-feat').addEventListener('click', function(){
+      row.remove(); renumberFeatures();
+    });
+    list.appendChild(row);
+    row.querySelector('input').focus();
+    renumberFeatures();
+  });
+
+  // Wire remove buttons on the initial 5 rows
+  document.querySelectorAll('#features-list .remove-feat').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      btn.closest('.feature-row').remove(); renumberFeatures();
+    });
+  });
+  renumberFeatures();
 
 })();
 </script>
