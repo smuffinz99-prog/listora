@@ -141,6 +141,45 @@ nav{position:sticky;top:0;z-index:50;background:rgba(10,13,20,.9);backdrop-filte
 .reviewer-avatar{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--accent2));display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:800;color:#fff;flex-shrink:0}
 .reviewer-name{font-size:13px;font-weight:700}
 .reviewer-detail{font-size:12px;color:var(--muted)}
+/* SEO Checker */
+.checker-wrap{max-width:820px;margin:0 auto;padding:80px 40px}
+.checker-box{background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:40px}
+.checker-url-row{display:flex;gap:12px}
+.checker-url-input{flex:1;padding:14px 18px;background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius);color:var(--text);font-size:15px;outline:none;transition:border-color .2s}
+.checker-url-input:focus{border-color:var(--accent)}
+.checker-url-input::placeholder{color:var(--muted)}
+.checker-btn{padding:14px 28px;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;border:none;border-radius:var(--radius);font-size:15px;font-weight:800;cursor:pointer;white-space:nowrap}
+.checker-platform{display:flex;align-items:center;gap:8px;margin-top:12px;font-size:13px;color:var(--muted);min-height:22px}
+.checker-platform .plat-chip{padding:3px 10px;border-radius:100px;background:rgba(99,102,241,.12);color:var(--accent);font-weight:700;font-size:12px;border:1px solid rgba(99,102,241,.2)}
+.checker-fields{display:none;margin-top:24px;border-top:1px solid var(--border);padding-top:24px;display:flex;flex-direction:column;gap:16px}
+.checker-fields.hidden{display:none!important}
+.checker-label{font-size:13px;font-weight:700;color:var(--muted);margin-bottom:6px;display:block}
+.checker-input{width:100%;padding:12px 16px;background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius);color:var(--text);font-size:14px;outline:none;resize:vertical;font-family:inherit;transition:border-color .2s}
+.checker-input:focus{border-color:var(--accent)}
+.checker-input::placeholder{color:var(--muted)}
+.checker-analyze-btn{align-self:flex-start;padding:13px 32px;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;border:none;border-radius:var(--radius);font-size:15px;font-weight:800;cursor:pointer}
+.checker-results{display:none;margin-top:28px;border-top:1px solid var(--border);padding-top:28px}
+.checker-results.show{display:block}
+.cr-top{display:flex;align-items:center;gap:32px;margin-bottom:24px;flex-wrap:wrap}
+.cr-ring-big{width:110px;height:110px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center}
+.cr-ring-inner{width:82px;height:82px;border-radius:50%;background:var(--surface);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px}
+.cr-score-num{font-size:30px;font-weight:900;line-height:1}
+.cr-score-label{font-size:11px;color:var(--muted)}
+.cr-summary h3{font-size:20px;font-weight:800;margin-bottom:6px}
+.cr-summary p{font-size:14px;color:var(--muted)}
+.cr-rows{display:flex;flex-direction:column;gap:10px;margin-bottom:20px}
+.cr-row{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;background:var(--surface2);border-radius:8px;font-size:14px}
+.cr-row-label{color:var(--muted)}
+.cr-tips{display:flex;flex-direction:column;gap:10px}
+.cr-tip{display:flex;gap:12px;padding:12px 16px;background:var(--surface2);border-radius:10px;font-size:13px;line-height:1.6}
+.cr-tip-icon{flex-shrink:0;font-size:16px}
+.cr-tip strong{color:var(--text)}
+.cr-tip span{color:var(--muted)}
+.cr-pro-blur{position:relative;margin-top:12px}
+.cr-pro-blur .cr-row,.cr-pro-blur .cr-tip{filter:blur(3px);pointer-events:none;user-select:none}
+.cr-pro-gate{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;background:rgba(10,13,20,.5);border-radius:10px;backdrop-filter:blur(1px);text-align:center;padding:16px}
+.cr-pro-gate p{font-size:13px;color:var(--muted);margin-bottom:4px}
+.cr-pro-gate a{padding:10px 24px;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;border-radius:var(--radius);font-size:14px;font-weight:800}
 /* FAQ */
 .faq-wrap{max-width:720px;margin:40px auto 0}
 .faq-item{border-bottom:1px solid var(--border)}
@@ -217,6 +256,71 @@ footer{background:var(--surface);border-top:1px solid var(--border);padding:56px
   <div class="stat-box"><div class="stat-n">30s</div><div class="stat-l">To a fully SEO-optimised listing</div></div>
   <div class="stat-box"><div class="stat-n">12+</div><div class="stat-l">SEO signals checked per listing</div></div>
   <div class="stat-box"><div class="stat-n">$6</div><div class="stat-l">Full Pro access per month</div></div>
+</div>
+
+<!-- SEO Checker -->
+<div class="checker-wrap" id="seo-checker">
+  <div class="section-kicker" style="text-align:center;margin-bottom:12px">Free SEO Checker</div>
+  <div class="section-title" style="text-align:center;margin-bottom:8px">Check your listing's SEO score — instantly</div>
+  <p class="section-sub" style="text-align:center;margin:0 auto 32px">Paste your Amazon, Etsy, Shopify, or eBay listing URL and we'll score it across the key ranking signals your marketplace uses.</p>
+  <div class="checker-box">
+    <div class="checker-url-row">
+      <input id="ck-url" class="checker-url-input" type="url" placeholder="https://www.amazon.com/dp/... or etsy.com/listing/... or ebay.com/itm/...">
+      <button class="checker-btn" onclick="CK.detectPlatform()">Detect →</button>
+    </div>
+    <div class="checker-platform" id="ck-plat-row"></div>
+
+    <div class="checker-fields hidden" id="ck-fields">
+      <div>
+        <label class="checker-label">Your listing title *</label>
+        <input id="ck-title" class="checker-input" type="text" placeholder="Paste your full listing title here">
+      </div>
+      <div>
+        <label class="checker-label">Bullet points / key features (paste all, one per line)</label>
+        <textarea id="ck-bullets" class="checker-input" rows="5" placeholder="• STAYS COLD 24H: Advanced vacuum insulation...&#10;• LEAK-PROOF LID: Triple-sealed lid...&#10;..."></textarea>
+      </div>
+      <div>
+        <label class="checker-label">Product description (optional — improves score accuracy)</label>
+        <textarea id="ck-desc" class="checker-input" rows="3" placeholder="Paste your product description..."></textarea>
+      </div>
+      <button class="checker-analyze-btn" onclick="CK.analyze()">Analyze My Listing →</button>
+    </div>
+
+    <div class="checker-results" id="ck-results">
+      <div class="cr-top">
+        <div class="cr-ring-big" id="ck-ring">
+          <div class="cr-ring-inner">
+            <span class="cr-score-num" id="ck-score-num">—</span>
+            <span class="cr-score-label">/100</span>
+          </div>
+        </div>
+        <div class="cr-summary">
+          <h3 id="ck-verdict"></h3>
+          <p id="ck-verdict-sub"></p>
+        </div>
+      </div>
+
+      <div class="cr-rows" id="ck-rows-free"></div>
+
+      <div class="cr-tips" id="ck-tips-free"></div>
+
+      <div class="cr-pro-blur" id="ck-pro-section">
+        <div class="cr-rows" id="ck-rows-pro">
+          <div class="cr-row"><span class="cr-row-label">Keyword density in title</span><span class="score-pill pill-warn">⚠ Medium</span></div>
+          <div class="cr-row"><span class="cr-row-label">Long-tail phrase coverage</span><span class="score-pill pill-fix">✗ Low</span></div>
+          <div class="cr-row"><span class="cr-row-label">Competitor keyword gaps</span><span class="score-pill pill-fix">✗ 8 gaps found</span></div>
+        </div>
+        <div class="cr-tips" style="margin-top:10px" id="ck-tips-pro">
+          <div class="cr-tip"><span class="cr-tip-icon">🔍</span><div><strong>Keyword gap:</strong> <span>3 high-traffic phrases your competitors rank for that you're missing entirely.</span></div></div>
+          <div class="cr-tip"><span class="cr-tip-icon">📈</span><div><strong>Long-tail tip:</strong> <span>Add "for gym" and "leak proof" as secondary phrases in bullets 3–4 to capture these searches.</span></div></div>
+        </div>
+        <div class="cr-pro-gate">
+          <p>Unlock full breakdown, keyword gaps & all suggestions</p>
+          <a href="app.html">Get Pro — $6/mo →</a>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 
 <!-- Features -->
@@ -530,6 +634,161 @@ footer{background:var(--surface);border-top:1px solid var(--border);padding:56px
 document.querySelectorAll('.faq-q').forEach(function(b){
   b.addEventListener('click',function(){this.closest('.faq-item').classList.toggle('open')});
 });
+
+var CK = (function(){
+  var PLATFORMS = {
+    amazon:  { name:'Amazon A9',      emoji:'🛒', titleMax:200, titleIdeal:[80,200], bulletsIdeal:5, descMin:300, backendChars:249 },
+    etsy:    { name:'Etsy Search',    emoji:'🎨', titleMax:140, titleIdeal:[100,140], bulletsIdeal:5, descMin:200 },
+    ebay:    { name:'eBay Cassini',   emoji:'📦', titleMax:80,  titleIdeal:[70,80],  bulletsIdeal:3, descMin:150 },
+    shopify: { name:'Shopify + Google', emoji:'🛍️', titleMax:80,  titleIdeal:[55,80],  bulletsIdeal:4, descMin:300 },
+  };
+
+  function detectFromUrl(url) {
+    if (/amazon\./i.test(url)) return 'amazon';
+    if (/etsy\./i.test(url))   return 'etsy';
+    if (/ebay\./i.test(url))   return 'ebay';
+    if (/shopify\.|myshopify\./i.test(url)) return 'shopify';
+    return null;
+  }
+
+  var currentPlatform = null;
+
+  function detectPlatform() {
+    var url = document.getElementById('ck-url').value.trim();
+    var platRow = document.getElementById('ck-plat-row');
+    if (!url) { platRow.innerHTML = '<span style="color:var(--red)">Paste a listing URL first</span>'; return; }
+    var plat = detectFromUrl(url);
+    if (!plat) {
+      platRow.innerHTML = '<span style="color:var(--yellow)">⚠ Couldn\'t detect marketplace — URL must be from Amazon, Etsy, eBay, or Shopify</span>';
+      return;
+    }
+    currentPlatform = plat;
+    var cfg = PLATFORMS[plat];
+    platRow.innerHTML = 'Detected: <span class="plat-chip">' + cfg.emoji + ' ' + cfg.name + '</span>';
+    document.getElementById('ck-fields').classList.remove('hidden');
+    document.getElementById('ck-results').classList.remove('show');
+    document.getElementById('ck-title').focus();
+  }
+
+  function score(plat, title, bullets, desc) {
+    var cfg = PLATFORMS[plat];
+    var rows = [], tips = [], total = 0, max = 0;
+
+    function check(label, pts, earned, pill, msg) {
+      max += pts; total += earned;
+      var pct = pts > 0 ? Math.round(earned / pts * 100) : 100;
+      var pillClass = pct >= 80 ? 'pill-ok' : pct >= 50 ? 'pill-warn' : 'pill-fix';
+      rows.push({ label: label, pill: pill || (pct >= 80 ? '✓ Good' : pct >= 50 ? '⚠ Fair' : '✗ Weak'), pillClass: pillClass });
+      if (msg) tips.push({ icon: pct >= 80 ? '✅' : pct >= 50 ? '⚠️' : '❌', msg: msg });
+    }
+
+    // Title length
+    var tLen = title.trim().length;
+    var tIdeal = cfg.titleIdeal;
+    var tPts = tLen >= tIdeal[0] && tLen <= tIdeal[1] ? 20 : tLen < tIdeal[0] ? Math.round(20 * tLen / tIdeal[0]) : 15;
+    var tPill = tLen + ' chars';
+    var tMsg = tLen < tIdeal[0]
+      ? 'Your title is ' + tLen + ' chars. Aim for ' + tIdeal[0] + '–' + tIdeal[1] + ' to use the full keyword space ' + cfg.name + ' gives you.'
+      : tLen > cfg.titleMax
+        ? 'Title is ' + tLen + ' chars — over the ' + cfg.titleMax + '-char limit. Trim it or it may get truncated.'
+        : null;
+    check('Title length', 20, tPts, tPill, tMsg);
+
+    // Keyword in first position
+    var firstWord = title.trim().split(/\s+/)[0] || '';
+    var hasKwFirst = firstWord.length >= 3 && !/^(the|a|an|for|with|and|or|of|in|to|by|at)$/i.test(firstWord);
+    check('Keyword in title start', 20, hasKwFirst ? 20 : 5,
+      hasKwFirst ? '✓ Strong' : '✗ Missing',
+      hasKwFirst ? null : plat === 'amazon'
+        ? 'Move your primary keyword to the very start of your title. Amazon\'s A9 algorithm weights the first 3 words most heavily.'
+        : 'Start your title with a high-traffic search phrase. ' + cfg.name + ' ranks titles that lead with buyer keywords.');
+
+    // Bullet count
+    var bulletLines = (bullets || '').split('\n').filter(function(l){ return l.trim().length > 10; });
+    var bCount = bulletLines.length;
+    var bPts = bCount >= cfg.bulletsIdeal ? 20 : Math.round(20 * bCount / cfg.bulletsIdeal);
+    check('Bullet points', 20, bPts, bCount + '/' + cfg.bulletsIdeal,
+      bCount < cfg.bulletsIdeal
+        ? 'You have ' + bCount + ' bullet point' + (bCount === 1 ? '' : 's') + '. Use all ' + cfg.bulletsIdeal + ' to maximise keyword coverage and help buyers make a decision.'
+        : null);
+
+    // Caps at bullet start (Amazon style "KEYWORD: benefit")
+    if (plat === 'amazon' || plat === 'shopify') {
+      var capsLeads = bulletLines.filter(function(l){ return /^[•\-\*]?\s*[A-Z]{3,}/.test(l.trim()); }).length;
+      var capsPts = bCount > 0 ? Math.round(20 * capsLeads / Math.max(bCount,1)) : 0;
+      check('Bold keyword lead in bullets', 20, capsPts,
+        capsLeads + '/' + bCount + ' bullets',
+        capsLeads < bCount
+          ? 'Start bullets with a KEYWORD: in all-caps (e.g. "STAYS COLD 24H:"). Amazon buyers scan bullets — the caps keyword is the hook that stops them.'
+          : null);
+    } else {
+      // Etsy/eBay: description length
+      var dLen = (desc || '').trim().length;
+      var dPts = dLen >= cfg.descMin ? 20 : Math.round(20 * dLen / cfg.descMin);
+      check('Description length', 20, dPts, dLen + ' chars',
+        dLen < cfg.descMin
+          ? 'Your description is ' + dLen + ' chars. Aim for ' + cfg.descMin + '+ to give ' + cfg.name + ' enough text to understand and index your product.'
+          : null);
+    }
+
+    // Description length (Amazon/Shopify only)
+    if (plat === 'amazon' || plat === 'shopify') {
+      var dLen2 = (desc || '').trim().length;
+      var dPts2 = dLen2 >= cfg.descMin ? 20 : Math.round(20 * dLen2 / cfg.descMin);
+      check('Description length', 20, dPts2, dLen2 + ' chars',
+        dLen2 < cfg.descMin
+          ? 'Your description is ' + dLen2 + ' chars. Aim for ' + cfg.descMin + '+ — it helps ' + cfg.name + ' understand your product and improves conversion.'
+          : null);
+    }
+
+    var pct = Math.round(total / max * 100);
+    return { score: pct, rows: rows, tips: tips };
+  }
+
+  function analyze() {
+    if (!currentPlatform) return;
+    var title   = document.getElementById('ck-title').value;
+    var bullets = document.getElementById('ck-bullets').value;
+    var desc    = document.getElementById('ck-desc').value;
+    if (!title.trim()) { alert('Please paste your listing title first.'); return; }
+
+    var result = score(currentPlatform, title, bullets, desc);
+    var s = result.score;
+
+    // Ring
+    var greenPct = s + '%';
+    document.getElementById('ck-ring').style.background =
+      'conic-gradient(' + (s >= 70 ? 'var(--green)' : s >= 45 ? 'var(--yellow)' : 'var(--red)') + ' 0% ' + greenPct + ', var(--border) ' + greenPct + ' 100%)';
+    document.getElementById('ck-score-num').textContent = s;
+    document.getElementById('ck-score-num').style.color = s >= 70 ? 'var(--green)' : s >= 45 ? 'var(--yellow)' : 'var(--red)';
+
+    var verdict = s >= 80 ? 'Strong listing' : s >= 60 ? 'Room to improve' : s >= 40 ? 'Needs work' : 'Low ranking potential';
+    var verdictSub = s >= 80
+      ? 'Your listing is well-optimised. A few tweaks could push it higher.'
+      : s >= 60
+        ? 'You\'ve got the basics but are leaving ranking points on the table.'
+        : 'Several key signals are weak — these fixes could significantly boost your position.';
+    document.getElementById('ck-verdict').textContent = verdict;
+    document.getElementById('ck-verdict-sub').textContent = verdictSub;
+
+    // Free rows (first 3)
+    var freeRows = result.rows.slice(0, 3);
+    document.getElementById('ck-rows-free').innerHTML = freeRows.map(function(r){
+      return '<div class="cr-row"><span class="cr-row-label">' + r.label + '</span><span class="score-pill ' + r.pillClass + '">' + r.pill + '</span></div>';
+    }).join('');
+
+    // Free tips (first 2)
+    var freeTips = result.tips.slice(0, 2);
+    document.getElementById('ck-tips-free').innerHTML = freeTips.map(function(t){
+      return '<div class="cr-tip"><span class="cr-tip-icon">' + t.icon + '</span><div><span>' + t.msg + '</span></div></div>';
+    }).join('');
+
+    document.getElementById('ck-results').classList.add('show');
+    document.getElementById('ck-results').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }
+
+  return { detectPlatform: detectPlatform, analyze: analyze };
+})();
 </script>
 </body>
 </html>
